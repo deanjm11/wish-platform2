@@ -3,7 +3,8 @@ const { Pool } = require("pg");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const app = express();
 app.use(express.json());
-
+const cors = require("cors");
+app.use(cors());
 const db = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
 let wishCounter = 0;
@@ -48,4 +49,5 @@ app.get("/user/:id", async (req, res) => {
   res.json({ user: user.rows[0], wishes: wishes.rows });
 });
 
-app.listen(process.env.PORT || 3000, () => console.log("Running on " + (process.env.PORT || 3000)));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => console.log("Running on port " + PORT));
